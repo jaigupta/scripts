@@ -5,7 +5,9 @@
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/")) ; Org-mode's repository
 (package-initialize)
 
-(load-file "~/scripts/emacs/custom-vars.el")
+(load-file "~/settings/emacs-custom-vars.el")
+(add-to-list 'load-path "~/myprojects/emacs/emacs-eclim/")
+(add-to-list 'load-path "~/myprojects/emacs/emacs-eclim-ide/")
 
 (setq-default tab-width 2)
 
@@ -16,22 +18,25 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
  '(blink-cursor-mode nil)
+ '(column-number-mode t)
  '(company-backends (quote (company-emacs-eclim company-elisp company-bbdb company-css company-semantic company-clang company-xcode company-cmake company-go company-capf (company-dabbrev-code company-gtags company-etags company-keywords) company-oddmuse company-files company-dabbrev company-abbrev)))
  '(custom-enabled-themes nil)
+ '(custom-safe-themes (quote ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
  '(ecb-options-version "2.40")
  '(eclim-eclipse-dirs jai-eclim-executable)
  '(eclim-executable jai-eclim-executable)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(ispell-dictionary "american")
- '(menu-bar-mode nil)
  '(menu-bar-no-scroll-bar t)
  '(org-startup-folded (quote content))
  '(python-guess-indent nil)
  '(python-indent 2 t)
  '(python-indent-guess-indent-offset nil)
  '(python-indent-offset 2)
+ '(send-mail-function (quote mailclient-send-it))
  '(show-paren-mode t)
+ '(text-scale-mode-step 1.2)
  '(tool-bar-mode nil)
  '(tooltip-mode nil)
  '(tramp-syntax (quote url))
@@ -42,12 +47,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#1F1F1F" :foreground "LightGrey" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 80 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "#111111" :foreground "LightGrey" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(company-scrollbar-bg ((t (:background "#191919"))))
  '(company-scrollbar-fg ((t (:background "#0c0c0c"))))
  '(company-tooltip ((t (:inherit default :background "#191919"))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
- '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+ '(tabbar-button ((t (:inherit tabbar-default :foreground "dark red"))))
+ '(tabbar-button-highlight ((t (:inherit tabbar-default))))
+ '(tabbar-default ((t (:inherit variable-pitch :background "#888888" :foreground "black"))))
+ '(tabbar-highlight ((t (:underline t))))
+ '(tabbar-selected ((t (:inherit tabbar-default :background "#CCCCCC"))))
+ '(tabbar-separator ((t (:inherit tabbar-default :background "#555555"))))
+ '(tabbar-unselected ((t (:inherit tabbar-default)))))
 
 
 (require 'ace-jump-mode)
@@ -122,6 +134,9 @@
 (setq-default indent-tabs-mode nil)
 (setq tab-width 2)
 
+(require 'expand-region)
+(global-set-key (kbd "C-@") 'er/expand-region)
+
 ;; I dont like C-x C-s for saving
 ;; Many editors and browsers kill line/text with C-x.
 ;; This is painful when you actually meant to save file.
@@ -157,7 +172,6 @@
 (font-lock-add-keywords 'js-mode (font-lock-width-keyword 80))
 (font-lock-add-keywords 'python-mode (font-lock-width-keyword 80))
 (font-lock-add-keywords 'borg-mode (font-lock-width-keyword 80))
-
 
 ;; list-buffers doesn't switch to buffer window.
 (global-set-key (kbd "C-x C-b") 'buffer-menu-other-window)
@@ -324,8 +338,8 @@
 ;; The active buffer should have different color mode line
 (set-face-background 'mode-line "#9999cc")
 
-(when window-system ;; not just X
-    (speedbar 1))
+;; (when window-system ;; not just X
+;;     (speedbar 1))
 
 (require 'ecb)
 (require 'ecb-autoloads)
@@ -500,11 +514,10 @@
 
 (global-set-key (kbd "<C-return>") 'yafolding-toggle-element)
 
-(add-hook 'after-save-hook 'eclim-problems-buffer-refresh)
-
 (global-set-key (kbd "C-c e c") 'eclim-problems-correct)
-(global-set-key (kbd "C-c e p") 'eclim-problems-buffer-refresh)
-(global-set-key (kbd "C-c e i") 'eclim-java-import-organize)
+(global-set-key (kbd "C-c e p") 'eclim-problems-update-maybe)
+(global-set-key (kbd "C-c e o") 'eclim-java-import-organize)
+(global-set-key (kbd "C-c e r") 'eclim-java-refactor-rename-symbol-at-point)
 
 (defun eval-and-replace (value)
   "Evaluate the sexp at point and replace it with its value"
@@ -523,7 +536,7 @@
   (other-window 1)
   (delete-window))
 
-(global-set-key (kbd "\C-c !") 'close-other-window)
+(global-set-key (kbd "\C-x !") 'close-other-window)
 
 
 ;; YAS expand advice add.
@@ -560,6 +573,51 @@
         "\C-a\C-iprivate static final \C-e"))
 
 (add-hook 'java-mode-hook 'java-mode-macros)
-(split-window-right)
+(add-hook 'java-mode-hook 'eclim-mode)
 
-(load-file "~/scripts/emacs/custom-defs.el")
+(setq vc-follow-symlinks t)
+(setq tabbar-background-color "#888888") ;; the color of the tabbar background
+(require 'powerline)
+(powerline-default-theme)
+(run-at-time "5 sec" 1 '(lambda ()
+                           (when (string-prefix-p "window" server-name)
+                             (tabbar-mode)
+)))
+
+(menu-bar-mode 0)
+
+(global-set-key (kbd "C-x C-b") 'ibuffer-list-buffers)
+;; (blink-cursor-mode 0)
+
+;; Smex should insert '-' when space is pressed.
+(defadvice smex (around space-inserts-hyphen activate compile)
+        (let ((ido-cannot-complete-command 
+               `(lambda ()
+                  (interactive)
+                  (if (string= " " (this-command-keys))
+                      (insert ?-)
+                    (funcall ,ido-cannot-complete-command)))))
+          ad-do-it))
+
+;; Original idea from
+;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
+(defun comment-dwim-line (&optional arg)
+  "Replacement for the comment-dwim command.
+        If no region is selected and current line is not blank and we are not at the end of the line,
+        then comment current line.
+        Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
+  (interactive "*P")
+  (comment-normalize-vars)
+  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+    (comment-dwim arg)))
+(global-set-key "\M-;" 'comment-dwim-line)
+
+(load-file "~/settings/emacs-custom-defs.el")
+
+(defun john-spotify ()
+  "wrapper for calling spotify from keyboard shortcut and removing possibility for error"
+  (interactive)
+  (setq debug-on-error t)
+  (helm-spotify)
+  (setq debug-on-error nil))
