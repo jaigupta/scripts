@@ -39,7 +39,7 @@
  '(text-scale-mode-step 1.2)
  '(tool-bar-mode nil)
  '(tooltip-mode nil)
- '(tramp-syntax (quote url))
+;; '(tramp-syntax (quote url))
  '(truncate-lines nil))
 
 (custom-set-faces
@@ -342,12 +342,12 @@
 ;; (when window-system ;; not just X
 ;;     (speedbar 1))
 
-(require 'ecb)
-(require 'ecb-autoloads)
+;; (require 'ecb)
+;; (require 'ecb-autoloads)
 
-(setq ecb-layout-name "left3")
+;; (setq ecb-layout-name "left3")
 
-(setq ecb-show-sources-in-directories-buffer 'always)
+;; (setq ecb-show-sources-in-directories-buffer 'always)
 
 ;; IBuffer grouping
 (setq ibuffer-saved-filter-groups
@@ -566,9 +566,9 @@
 (setq tabbar-background-color "#888888") ;; the color of the tabbar background
 (require 'powerline)
 (powerline-default-theme)
-(run-at-time "5 sec" 1 '(lambda ()
-                           (when (string-prefix-p "window" server-name)
-                             (tabbar-mode)
+(run-at-time "5 sec" nil '(lambda ()
+                          (when (string-prefix-p "window" server-name)
+                            (tabbar-mode)
 )))
 
 (menu-bar-mode 0)
