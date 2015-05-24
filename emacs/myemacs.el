@@ -6,6 +6,7 @@
 (package-initialize)
 
 (load-file "~/settings/emacs-custom-vars.el")
+(add-to-list 'load-path "~/myprojects/scripts/emacs")
 (add-to-list 'load-path "~/myprojects/emacs/emacs-eclim/")
 (add-to-list 'load-path "~/myprojects/emacs/emacs-eclim-ide/")
 
@@ -502,7 +503,7 @@
 (global-set-key (kbd "<C-return>") 'yafolding-toggle-element)
 
 (global-set-key (kbd "C-c e c") 'eclim-problems-correct)
-(global-set-key (kbd "C-c e p") 'eclim-problems-update-maybe)
+(global-set-key (kbd "C-c e p") 'eclim-problems-buffer-refresh)
 (global-set-key (kbd "C-c e o") 'eclim-java-import-organize)
 (global-set-key (kbd "C-c e r") 'eclim-java-refactor-rename-symbol-at-point)
 
@@ -600,7 +601,7 @@
     (comment-dwim arg)))
 (global-set-key "\M-;" 'comment-dwim-line)
 
-(require' pos-tip)
+(require 'pos-tip)
 
 (require 'helm)
 (require 'helm-spotify)
