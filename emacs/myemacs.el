@@ -135,7 +135,8 @@
 (setq tab-width 2)
 
 (require 'expand-region)
-(global-set-key (kbd "C-@") 'er/expand-region)
+(global-set-key (kbd "C-x SPC") 'er/expand-region)
+(global-set-key (kbd "C-@") 'set-mark-command)
 
 ;; I dont like C-x C-s for saving
 ;; Many editors and browsers kill line/text with C-x.
@@ -379,23 +380,9 @@
               (lambda ()
                 (ibuffer-switch-to-saved-filter-groups "default")))
 
-;; Open some of by useful buffers by default
-(find-file "~/.emacs")
-(find-file "~/.zshrc")
-(find-file "~/todo.org")
-
 (require 'evil)
 ;; (evil-mode 1)
 (global-set-key (kbd "C-c m e") 'evil-mode)
-
-;; Bindings for g4 commands
-(global-set-key (kbd "C-c g p") 'g4-pending)
-(global-set-key (kbd "C-c g e") 'g4-edit)
-(global-set-key (kbd "C-c g d") 'g4-ediff)
-(global-set-key (kbd "C-c g l") 'g4-lint)
-(global-set-key (kbd "C-c g r") 'g4-revert)
-(global-set-key (kbd "C-c g a") 'g4-add)
-(global-set-key (kbd "C-c g c") 'g4-client)
 
 ;; desktop.el's default sessions sucks!
 (require 'desktop)
@@ -613,11 +600,22 @@
     (comment-dwim arg)))
 (global-set-key "\M-;" 'comment-dwim-line)
 
-(load-file "~/settings/emacs-custom-defs.el")
+(require' pos-tip)
 
-(defun john-spotify ()
+(require 'helm)
+(require 'helm-spotify)
+(helm-mode t)
+
+(defun spotify-patched ()
   "wrapper for calling spotify from keyboard shortcut and removing possibility for error"
   (interactive)
   (setq debug-on-error t)
   (helm-spotify)
   (setq debug-on-error nil))
+
+(load-file "~/settings/emacs-custom-defs.el")
+
+;; Open some of by useful buffers by default
+(find-file "~/.emacs")
+(find-file "~/.zshrc")
+(find-file "~/todo.org")
