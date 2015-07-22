@@ -1,12 +1,11 @@
 (require 'package)
-
 (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/")) ; Org-mode's repository
 (package-initialize)
 
 (load-file "~/settings/emacs-custom-vars.el")
-(add-to-list 'load-path "~/myprojects/scripts/emacs")
+(add-to-list 'load-path "~/myprojects/scripts/emacs/")
 (add-to-list 'load-path "~/myprojects/emacs/emacs-eclim/")
 (add-to-list 'load-path "~/myprojects/emacs/emacs-eclim-ide/")
 
@@ -284,7 +283,8 @@
 (global-eclim-mode)
 
 (require 'eclimd)
-
+(require 'eclim-ido)
+(require 'eclim-postip)
 ;; enable viewing local help in status. You can also call display-local-help
 ;; manually every time but its better to see the help automatically.
 (setq help-at-pt-display-when-idle t)
@@ -381,9 +381,7 @@
               (lambda ()
                 (ibuffer-switch-to-saved-filter-groups "default")))
 
-(require 'evil)
-;; (evil-mode 1)
-(global-set-key (kbd "C-c m e") 'evil-mode)
+(require 'evil-setup)
 
 ;; desktop.el's default sessions sucks!
 (require 'desktop)
@@ -506,6 +504,8 @@
 (global-set-key (kbd "C-c e p") 'eclim-problems-buffer-refresh)
 (global-set-key (kbd "C-c e o") 'eclim-java-import-organize)
 (global-set-key (kbd "C-c e r") 'eclim-java-refactor-rename-symbol-at-point)
+(global-set-key (kbd "C-c e d") 'eclim-java-show-documentation-for-current-element)
+(global-set-key (kbd "C-c e f") 'eclim-file-locate)
 
 (defun eval-and-replace (value)
   "Evaluate the sexp at point and replace it with its value"
@@ -525,7 +525,6 @@
   (delete-window))
 
 (global-set-key (kbd "\C-x !") 'close-other-window)
-
 
 ;; YAS expand advice add.
 (defun yas-advise-indent-function (function-symbol)
@@ -565,12 +564,10 @@
 
 (setq vc-follow-symlinks t)
 (setq tabbar-background-color "#888888") ;; the color of the tabbar background
+;; (require 'powerline)
+;; (powerline-default-theme)
 (require 'powerline)
-(powerline-default-theme)
-(run-at-time "5 sec" 1 '(lambda ()
-                           (when (string-prefix-p "window" server-name)
-                             (tabbar-mode)
-)))
+(powerline-center-evil-theme)
 
 (menu-bar-mode 0)
 
@@ -606,6 +603,7 @@
 (require 'helm)
 (require 'helm-spotify)
 (helm-mode t)
+(global-set-key (kbd "C-x C-f") 'ido-find-file)
 
 (defun spotify-patched ()
   "wrapper for calling spotify from keyboard shortcut and removing possibility for error"
@@ -615,6 +613,26 @@
   (setq debug-on-error nil))
 
 (load-file "~/settings/emacs-custom-defs.el")
+
+;; ERC using SSL: see http://www.emacswiki.org/emacs/ErcSSL
+(require 'tls)
+
+;; M-x start-irc
+(defun start-irc ()
+  "Connect to IRC."
+  (interactive)
+  (erc-tls :server "irc.corp.google.com" :port 6697))
+
+(require 'recentf)
+
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to find a recent file."
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
 ;; Open some of by useful buffers by default
 (find-file "~/.emacs")
