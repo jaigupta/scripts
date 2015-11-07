@@ -68,9 +68,12 @@
 (column-number-mode t)
 
 ;; For starting multiple emacs daemon
-(setq server-use-tcp t)
+;; (setq server-use-tcp t)
+;; Currently using setup for only one daemon
+(server-start)
 ;; Now start server using emacs --daemon=<server-name>
 ;; connect to the server using emacsclient --server-file=<server-name> -c -n
+
 
 ;; multiple cursors
 (require 'multiple-cursors)
