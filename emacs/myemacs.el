@@ -1,3 +1,19 @@
+;; README
+;;
+;; New setup instructions
+;; ======================
+;;
+;; myemacs.el is the initiation point for all configurations.
+;; ln -sf <path to repo>/myemacs.el ~/.emacs
+;;
+;; for all variable defitions which need to go at top, include in ~/settings/emacs-custom-vars.el
+;; ln -sf <path to custom repo>/custom-vars.el ~/settings/emacs-custom-vars.el
+;;
+;; do the same thing for custom defs. These are loaded a bit later down this config file.
+;; ln -sf <path to custom repo/custom-defs.el ~/settings/emacs-custom-defs.el
+;;
+;; Thats all! Happy Productivity!
+
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
