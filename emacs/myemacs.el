@@ -7,7 +7,6 @@
 (load-file "~/settings/emacs-custom-vars.el")
 (add-to-list 'load-path "~/myprojects/scripts/emacs/")
 (add-to-list 'load-path "~/myprojects/emacs/emacs-eclim/")
-(add-to-list 'load-path "~/myprojects/emacs/emacs-eclim-ide/")
 
 (setq-default tab-width 2)
 

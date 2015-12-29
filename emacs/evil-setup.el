@@ -131,7 +131,7 @@
                     (cider-repl-mode . emacs)
                     (comint-mode . emacs)
                     (eshell-mode . emacs)
-                    (fundamental-mode . emacs)
+                    ;; (fundamental-mode . emacs)
                     (git-commit-mode . insert)
                     (git-rebase-mode . emacs)
                     (help-mode . emacs)
