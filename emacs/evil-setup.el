@@ -1,7 +1,7 @@
 ;;; evil-leader - ViM leader key for evil-mode
 ;;; https://github.com/cofi/evil-leader
 (require 'evil-leader)
-(evil-leader/set-leader ";")
+(evil-leader/set-leader ",")
 
 ;; Evil mode tries to take away my tab key
 (setq evil-want-C-i-jump nil)
@@ -179,7 +179,7 @@
 (require 'linum-relative)
 
 ;; abbrev comes with evil
-(diminish 'abbrev-mode)
+;; (diminish 'abbrev-mode)
 
 ;; evil-surround - Emacs version of surround.vim
 ;; https://github.com/timcharper/evil-surround
