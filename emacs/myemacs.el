@@ -1,3 +1,19 @@
+;; README
+;;
+;; New setup instructions
+;; ======================
+;;
+;; myemacs.el is the initiation point for all configurations.
+;; ln -sf <path to repo>/myemacs.el ~/.emacs
+;;
+;; for all variable defitions which need to go at top, include in ~/settings/emacs-custom-vars.el
+;; ln -sf <path to custom repo>/custom-vars.el ~/settings/emacs-custom-vars.el
+;;
+;; do the same thing for custom defs. These are loaded a bit later down this config file.
+;; ln -sf <path to custom repo/custom-defs.el ~/settings/emacs-custom-defs.el
+;;
+;; Thats all! Happy Productivity!
+
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -7,7 +23,6 @@
 (load-file "~/settings/emacs-custom-vars.el")
 (add-to-list 'load-path "~/myprojects/scripts/emacs/")
 (add-to-list 'load-path "~/myprojects/emacs/emacs-eclim/")
-(add-to-list 'load-path "~/myprojects/emacs/emacs-eclim-ide/")
 
 (setq-default tab-width 2)
 
@@ -69,9 +84,12 @@
 (column-number-mode t)
 (setq js-indent-level 2)
 ;; For starting multiple emacs daemon
-(setq server-use-tcp t)
+;; (setq server-use-tcp t)
+;; Currently using setup for only one daemon
+(server-start)
 ;; Now start server using emacs --daemon=<server-name>
 ;; connect to the server using emacsclient --server-file=<server-name> -c -n
+
 
 ;; multiple cursors
 (require 'multiple-cursors)
