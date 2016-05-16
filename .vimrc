@@ -1,5 +1,5 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
+
 
 " autocompletion
 set wildmode=longest,list,full
@@ -38,6 +38,18 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'tpope/vim-pathogen'
 
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+
+filetype off
+filetype plugin indent off
+
+call pathogen#infect()
+call pathogen#helptags()
+
+filetype on
+filetype plugin indent on
+
 nnoremap ; :
 
 set noshowmode
@@ -54,13 +66,12 @@ let mapleader=","
 " backup and undo files in a single location.
 set nobackup
 set undofile
-set undodir="~/.vim/undo//"
+set undodir='~/.vim/undo//'
+" set backupdir='~/.vim/backup//'
 
+syntax enable
 set background=dark
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+colorscheme solarized
 
 " close vim if the only buffer left is NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -81,5 +92,4 @@ nnoremap <S-k> 30k
 
 nnoremap <C-Left> :bnext<CR>
 nnoremap <C-Right> :bprevious<CR>
-
 
