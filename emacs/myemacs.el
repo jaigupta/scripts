@@ -662,7 +662,7 @@
 
 (setq interprogram-paste-function 'x-selection-value)
 
-;; Open some of by useful buffers by default
+;; Open some useful buffers by default
 (find-file "~/.emacs")
 (find-file "~/.zshrc")
 (find-file "~/todo.org")
