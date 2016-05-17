@@ -76,7 +76,7 @@
  '(tabbar-separator ((t (:inherit tabbar-default :background "#555555"))))
  '(tabbar-unselected ((t (:inherit tabbar-default)))))
 
-
+(global-auto-revert-mode t)
 (require 'ace-jump-mode)
 (global-set-key "\C-cs" 'ace-jump-mode)
 
@@ -85,7 +85,7 @@
 ;; For starting multiple emacs daemon
 ;; (setq server-use-tcp t)
 ;; Currently using setup for only one daemon
-(server-start)
+;;(server-start)
 ;; Now start server using emacs --daemon=<server-name>
 ;; connect to the server using emacsclient --server-file=<server-name> -c -n
 
@@ -301,8 +301,8 @@
 (global-eclim-mode)
 
 (require 'eclimd)
-(require 'eclim-ido)
-(require 'eclim-postip)
+;;(require 'eclim-ido)
+;;(require 'eclim-postip)
 ;; enable viewing local help in status. You can also call display-local-help
 ;; manually every time but its better to see the help automatically.
 (setq help-at-pt-display-when-idle t)
