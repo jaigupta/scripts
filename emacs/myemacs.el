@@ -11,7 +11,7 @@
 ;;
 ;; do the same thing for custom defs. These are loaded a bit later down this config file.
 ;; ln -sf <path to custom repo/custom-defs.el ~/settings/emacs-custom-defs.el
-;;
+		;;
 ;; Thats all! Happy Productivity!
 
 (require 'package)
@@ -62,7 +62,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#111111" :foreground "LightGrey" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "#111111" :foreground "LightGrey" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "unknown" :family "Mono Sans Dejavu"))))
  '(company-scrollbar-bg ((t (:background "#191919"))))
  '(company-scrollbar-fg ((t (:background "#0c0c0c"))))
  '(company-tooltip ((t (:inherit default :background "#191919"))))
@@ -77,11 +77,13 @@
  '(tabbar-unselected ((t (:inherit tabbar-default)))))
 
 (global-auto-revert-mode t)
+(set-frame-font "Liberation Mono-14:antialias=1")
+
 (require 'ace-jump-mode)
 (global-set-key "\C-cs" 'ace-jump-mode)
 
 (column-number-mode t)
-
+(setq js-indent-level 2)
 ;; For starting multiple emacs daemon
 ;; (setq server-use-tcp t)
 ;; Currently using setup for only one daemon
@@ -106,6 +108,17 @@
 
 ;; highlight word on idle
 (require 'idle-highlight-mode)
+(idle-highlight-mode 1)
+
+;; Please backups should not be in my directories.
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; enable smooth scrolling
+(require 'smooth-scrolling)
+(smooth-scrolling-mode t)
 
 ;; ido-mode
 (require 'ido)
@@ -301,8 +314,9 @@
 (global-eclim-mode)
 
 (require 'eclimd)
-;;(require 'eclim-ido)
-;;(require 'eclim-postip)
+;; (require 'eclim-ido)
+;; (require 'eclim-postip)
+
 ;; enable viewing local help in status. You can also call display-local-help
 ;; manually every time but its better to see the help automatically.
 (setq help-at-pt-display-when-idle t)
@@ -354,9 +368,6 @@
 ;;  (lambda ()
 ;;    (unless (eq major-mode 'google3-build-mode)
 ;;      (add-hook 'before-save-hook 'google-pyformat nil t))))
-
-;; The active buffer should have different color mode line
-(set-face-background 'mode-line "#9999cc")
 
 ;; (when window-system ;; not just X
 ;;     (speedbar 1))
@@ -651,7 +662,9 @@
 
 (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
-;; Open some of by useful buffers by default
+(setq interprogram-paste-function 'x-selection-value)
+
+;; Open some useful buffers by default
 (find-file "~/.emacs")
 (find-file "~/.zshrc")
 (find-file "~/todo.org")

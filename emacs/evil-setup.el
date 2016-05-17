@@ -179,7 +179,7 @@
 (require 'linum-relative)
 
 ;; abbrev comes with evil
-(diminish 'abbrev-mode)
+;; (diminish 'abbrev-mode)
 
 ;; evil-surround - Emacs version of surround.vim
 ;; https://github.com/timcharper/evil-surround
