@@ -11,7 +11,7 @@
 ;;
 ;; do the same thing for custom defs. These are loaded a bit later down this config file.
 ;; ln -sf <path to custom repo/custom-defs.el ~/settings/emacs-custom-defs.el
-;;
+		;;
 ;; Thats all! Happy Productivity!
 
 (require 'package)
@@ -76,6 +76,7 @@
  '(tabbar-separator ((t (:inherit tabbar-default :background "#555555"))))
  '(tabbar-unselected ((t (:inherit tabbar-default)))))
 
+(global-auto-revert-mode t)
 (set-frame-font "Liberation Mono-14:antialias=1")
 
 (require 'ace-jump-mode)
@@ -86,7 +87,7 @@
 ;; For starting multiple emacs daemon
 ;; (setq server-use-tcp t)
 ;; Currently using setup for only one daemon
-(server-start)
+;;(server-start)
 ;; Now start server using emacs --daemon=<server-name>
 ;; connect to the server using emacsclient --server-file=<server-name> -c -n
 
@@ -315,6 +316,7 @@
 (require 'eclimd)
 ;; (require 'eclim-ido)
 ;; (require 'eclim-postip)
+
 ;; enable viewing local help in status. You can also call display-local-help
 ;; manually every time but its better to see the help automatically.
 (setq help-at-pt-display-when-idle t)
