@@ -60,11 +60,14 @@ call pathogen#helptags()
 filetype on
 filetype plugin indent on
 
-nnoremap ; :
-
+set encoding=utf-8
+set ruler
+set hidden
+set confirm
+set ignorecase
+set smartcase
 set noshowmode
 set relativenumber number
-filetype on
 set tabstop=2 shiftwidth=2 expandtab
 set conceallevel=0
 set laststatus=2
