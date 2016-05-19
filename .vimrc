@@ -18,7 +18,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 " Random helper functions
 Plugin 'L9'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 " Tags for file (summary with tags)
 Plugin 'majutsushi/tagbar'
 Plugin 'moll/vim-node'
