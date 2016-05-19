@@ -14,6 +14,13 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+" Git wrapper
+Plugin 'tpope/vim-fugitive'
+" Random helper functions
+Plugin 'L9'
+Plugin 'kien/ctrlp.vim'
+" Tags for file (summary with tags)
+Plugin 'majutsushi/tagbar'
 Plugin 'moll/vim-node'
 Plugin 'vim-scripts/SyntaxComplete'
 Plugin 'burnettk/vim-angular'
@@ -25,6 +32,9 @@ Plugin 'benekastah/neomake'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'AndrewRadev/switch.vim'
 Plugin 'Chiel92/vim-autoformat'
+
+" Solarized color theme
+Plugin 'alteration/vim-colors-solarized'
 
 Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimproc.vim'  " configure this
