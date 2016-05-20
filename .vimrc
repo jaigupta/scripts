@@ -106,7 +106,7 @@ set noswapfile
 " set directory='~/.vim/swap//'
 
 set background=dark
-let g:airline_powerline_fonts = 0
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 if has('gui_running')
   colorscheme solarized
@@ -144,6 +144,9 @@ nnoremap <S-k> 30k
 
 nnoremap <leader>bn :bnext<CR>
 nnoremap <leader>bp :bprevious<CR>
+
+" Start editing file in the same folder
+nnoremap <Leader>e :e <C-R>=expand('%:p:h') . '/'<CR>
 
 " Easymotion search start
 " ,,s
