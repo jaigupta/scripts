@@ -105,4 +105,5 @@ nnoremap <S-k> 30k
 
 nnoremap <C-Left> :bnext<CR>
 nnoremap <C-Right> :bprevious<CR>
+nnoremap <leader>e :e %:h
 
