@@ -1,5 +1,6 @@
 set nocompatible              " be iMproved, required
 
+
 set encoding=utf-8
 
 " autocompletion
