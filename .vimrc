@@ -1,8 +1,57 @@
 set nocompatible              " be iMproved, required
 
+set encoding=utf-8
+
 " autocompletion
 set wildmode=longest,list,full
 set wildmenu
+
+"Leave some context lines above and below cursor
+set scrolloff=5
+set mousemodel=extend
+" Use X clipboard
+set clipboard=unnamed
+set clipboard+=unnamed
+
+" Use 256 colors in term
+set t_Co=256
+" Display status line always
+set laststatus=2
+
+set ruler
+set hidden
+set confirm
+set ignorecase
+set smartcase
+set noshowmode
+set relativenumber number
+set tabstop=2 shiftwidth=2 expandtab
+set conceallevel=0
+set laststatus=2
+set wrap linebreak nolist
+set foldmethod=indent
+set foldnestmax=10
+set nofoldenable
+set foldlevel=2
+set hlsearch
+set incsearch
+
+" leader is ,
+let mapleader=","
+
+" backup and undo files in a single location.
+set undofile                " Save undo's after file closes
+set undodir='~/.vim/undo//'
+set undolevels=1000         " How many undos
+set undoreload=10000        " number of lines to save for undo
+
+set nobackup
+set noswapfile
+" set backupdir='~/.vim/backup//'
+" set directory='~/.vim/swap//'
+
+set background=dark
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -51,14 +100,16 @@ Plugin 'tpope/vim-pathogen'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
+filetype off
 filetype plugin indent off
 
 call pathogen#infect()
 call pathogen#helptags()
 
+filetype on
 filetype plugin indent on
 
-" Vim syntax based color highlighting
+" Vim syntax based color highlighting, Preferably after pathogen.
 syntax enable
 
 "Leave some context lines above and below cursor
@@ -106,23 +157,25 @@ set noswapfile
 " set directory='~/.vim/swap//'
 
 set background=dark
-let g:airline_powerline_fonts = 1
+
 let g:airline#extensions#tabline#enabled = 1
 if has('gui_running')
   colorscheme solarized
+  let g:airline_powerline_fonts = 1
+else
   " Instead of installing the powerline fonts, I am using my own symbols from
   " unicode.
   let g:airline_left_sep = '»'
   let g:airline_left_sep = '▶'
   let g:airline_right_sep = '«'
   let g:airline_right_sep = '◀'
-else
   colorscheme desert
-  set encoding=utf-8
 endif
 
 " close vim if the only buffer left is NERDTree
+let g:NERDTreeDirArrows = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 
 nnoremap tn :tabnew<Space>
 nnoremap tk :tabnext<CR>
@@ -133,6 +186,9 @@ nnoremap tl :tablast<CR>
 let g:session_autoload = 'no'
 let g:session_autosave = 'no'
 let g:solarized_termcolors=256
+
+" Disable devicons as fonts are not installed. TODO: install fonts
+let g:webdevicons_enable = 0
 
 " Avoid the Esc key
 inoremap jk <Esc>
@@ -146,7 +202,28 @@ nnoremap <leader>bn :bnext<CR>
 nnoremap <leader>bp :bprevious<CR>
 
 " Start editing file in the same folder
-nnoremap <Leader>e :e <C-R>=expand('%:p:h') . '/'<CR>
+nnoremap <leader>ee :e <C-R>=expand('%:p:h') . '/'<CR>
 
 " Easymotion search start
 " ,,s
+
+let g:EclimCompletionMethod = 'omnifunc'
+
+" NERDTree mappings
+noremap <leader>nf :NERDTreeFind<CR>
+noremap <leader>nt :NERDTreeToggle<CR>
+
+" Eclim
+nnoremap <leader>ef :LocateFile<CR>
+nnoremap <leader>ei :JavaImport<CR>
+nnoremap <leader>eo :JavaImportOrganize<CR>
+nnoremap <leader>ec :JavaCorrect<CR>
+
+" Window switch
+nnoremap <leader>wo :only<CR>
+nnoremap <leader>wh :hide<CR>
+nnoremap <leader>wv :vsplit<CR>
+nnoremap <leader>ws :split<CR>
+
+" Comments
+nnoremap <leader>c :TComment<CR>
