@@ -1,18 +1,22 @@
 set nocompatible              " be iMproved, required
 
-
-set encoding=utf-8
-
+if !has('nvim')
+  set encoding=utf-8
+endif
 " autocompletion
 set wildmode=longest,list,full
 set wildmenu
+
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 
 "Leave some context lines above and below cursor
 set scrolloff=5
 set mousemodel=extend
 " Use X clipboard
-set clipboard=unnamed
-set clipboard+=unnamed
+if !has('nvim')
+  set clipboard=unnamed
+  set clipboard+=unnamed
+endif
 
 " Use 256 colors in term
 set t_Co=256
@@ -28,28 +32,29 @@ set noshowmode
 set relativenumber number
 set tabstop=2 shiftwidth=2 expandtab
 set conceallevel=0
+" Always display status line`
 set laststatus=2
 set wrap linebreak nolist
-set foldmethod=indent
+set foldmethod=syntax
 set foldnestmax=10
 set nofoldenable
 set foldlevel=2
 set hlsearch
 set incsearch
+set sessionoptions=buffers
 
-" leader is ,
-let mapleader=","
+" leader is <Space> and \ for backup
+let mapleader='\'
+map <Space> \
 
 " backup and undo files in a single location.
 set undofile                " Save undo's after file closes
-set undodir='~/.vim/undo//'
+set undodir=~/.vim/undo//,/tmp
 set undolevels=1000         " How many undos
 set undoreload=10000        " number of lines to save for undo
 
-set nobackup
-set noswapfile
-" set backupdir='~/.vim/backup//'
-" set directory='~/.vim/swap//'
+set backupdir=~/.vim/backup//,/tmp
+set directory=~/.vim/swap//,/tmp
 
 set background=dark
 
@@ -82,21 +87,31 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'AndrewRadev/switch.vim'
 Plugin 'Chiel92/vim-autoformat'
 Plugin 'easymotion/vim-easymotion'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'Zuckonit/vim-airline-tomato'
 
 " Solarized color theme
 Plugin 'alteration/vim-colors-solarized'
+Plugin 'morhetz/gruvbox'
 
 Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimproc.vim'  " configure this
 Plugin 'Shougo/neco-vim'
+" Supertab
+Plugin 'ervandew/supertab'
+
+" Snippets
+Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
 Plugin 'wincent/terminus'
-Plugin 'ryanoasis/vim-devicons'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'tpope/vim-pathogen'
+
+" Same as git gutter but has support for perforce.
+Plugin 'mhinz/vim-signify'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -112,52 +127,6 @@ filetype plugin indent on
 
 " Vim syntax based color highlighting, Preferably after pathogen.
 syntax enable
-
-"Leave some context lines above and below cursor
-set scrolloff=5
-set mousemodel=extend
-" Use X clipboard
-set clipboard=unnamed
-set clipboard+=unnamed
-
-" Use 256 colors in term
-set t_Co=256
-" Display status line always
-set laststatus=2
-
-set ruler
-set hidden
-set confirm
-set ignorecase
-set smartcase
-set noshowmode
-set relativenumber number
-set tabstop=2 shiftwidth=2 expandtab
-set conceallevel=0
-set laststatus=2
-set wrap linebreak nolist
-set foldmethod=indent
-set foldnestmax=10
-set nofoldenable
-set foldlevel=2
-set hlsearch
-set incsearch
-
-" leader is ,
-let mapleader=","
-
-" backup and undo files in a single location.
-set undofile                " Save undo's after file closes
-set undodir='~/.vim/undo//'
-set undolevels=1000         " How many undos
-set undoreload=10000        " number of lines to save for undo
-
-set nobackup
-set noswapfile
-" set backupdir='~/.vim/backup//'
-" set directory='~/.vim/swap//'
-
-set background=dark
 
 let g:airline#extensions#tabline#enabled = 1
 if has('gui_running')
@@ -177,13 +146,6 @@ endif
 let g:NERDTreeDirArrows = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-
-nnoremap tn :tabnew<Space>
-nnoremap tk :tabnext<CR>
-nnoremap tj :tabprev<CR>
-nnoremap th :tabfirst<CR>
-nnoremap tl :tablast<CR>
-
 let g:session_autoload = 'no'
 let g:session_autosave = 'no'
 let g:solarized_termcolors=256
@@ -193,11 +155,10 @@ let g:webdevicons_enable = 0
 
 " Avoid the Esc key
 inoremap jk <Esc>
-vnoremap jk <Esc>jk <Esc>
 
 " Navigation
-nnoremap <S-j> 30j
-nnoremap <S-k> 30k
+nnoremap <c-j> 30j
+nnoremap <c-k> 30k
 
 nnoremap <leader>bn :bnext<CR>
 nnoremap <leader>bp :bprevious<CR>
@@ -215,16 +176,19 @@ noremap <leader>nf :NERDTreeFind<CR>
 noremap <leader>nt :NERDTreeToggle<CR>
 
 " Eclim
-nnoremap <leader>ef :LocateFile<CR>
+nnoremap <leader>el :LocateFile<CR>
 nnoremap <leader>ei :JavaImport<CR>
 nnoremap <leader>eo :JavaImportOrganize<CR>
 nnoremap <leader>ec :JavaCorrect<CR>
 
 " Window switch
-nnoremap <leader>wo :only<CR>
+nnoremap <leader>wz :only<CR>
 nnoremap <leader>wh :hide<CR>
 nnoremap <leader>wv :vsplit<CR>
 nnoremap <leader>ws :split<CR>
+nnoremap <leader>wo <c-w><c-w>
 
 " Comments
-nnoremap <leader>c :TComment<CR>
+nnoremap <leader>cc :TComment<CR>
+
+
