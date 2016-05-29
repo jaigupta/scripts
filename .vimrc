@@ -1,5 +1,4 @@
 set nocompatible
-
 if !has('nvim')
   set encoding=utf-8
 endif
@@ -35,7 +34,7 @@ set conceallevel=0
 " Always display status line`
 set laststatus=2
 set wrap linebreak nolist
-set foldmethod=syntax
+set foldmethod=indent
 set foldnestmax=10
 set nofoldenable
 set foldlevel=2
@@ -57,6 +56,52 @@ set backupdir=~/.vim/backup//,/tmp
 set directory=~/.vim/swap//,/tmp
 
 set background=dark
+
+" Show margin at 81 columns by default
+set colorcolumn=81
+" Word wrap at 80 columns by default
+set textwidth=80
+
+" Java files can have 100 characters per line
+autocmd bufreadpre *.java setlocal colorcolumn=101
+autocmd bufreadpre *.java setlocal textwidth=79
+
+" Start scrolling before we reach the edges of the editing window
+set scrolloff=14
+
+" Don't wrap lines
+set nowrap
+
+" Highlight cursor line
+augroup CursorLine
+    au!
+    au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    au WinLeave * setlocal nocursorline
+augroup END
+
+" Allow mouse usage in normal mode
+set mouse=n
+
+" Set xterm mouse mode to allow resizing of splits with mouse inside Tmux
+set ttymouse=xterm2
+
+" Use spaces instead of tabs
+set expandtab
+
+" Make trailing whitespace annoyingly highlighted
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" Open splits in a more intuitive way
+set splitbelow
+set splitright
+
+" Jump to matches when entering regexp
+set showmatch
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -139,7 +184,7 @@ else
   let g:airline_left_sep = '▶'
   let g:airline_right_sep = '«'
   let g:airline_right_sep = '◀'
-  colorscheme desert
+  colorscheme gruvbox
   let g:airline_theme="term"
 endif
 
@@ -150,9 +195,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 let g:session_autoload = 'no'
 let g:session_autosave = 'no'
 let g:solarized_termcolors=256
-
-" Disable devicons as fonts are not installed. TODO: install fonts
-let g:webdevicons_enable = 0
 
 " Basic comman shortcuts
 nnoremap <leader>w :w<cr>
@@ -166,6 +208,7 @@ nnoremap <c-k> 30k
 
 nnoremap <leader>bn :bnext<CR>
 nnoremap <leader>bp :bprevious<CR>
+nnoremap <leader>bd :bd<CR>
 
 " Start editing file in the same folder
 nnoremap <leader>el :e <C-R>=expand('%:p:h') . '/'<CR>
@@ -178,12 +221,13 @@ let g:EclimCompletionMethod = 'omnifunc'
 " NERDTree mappings
 noremap <leader>nf :NERDTreeFind<CR>
 noremap <leader>nt :NERDTreeToggle<CR>
+noremap <leader>tt :TagbarToggle<CR>
 
 " Eclim
-nnoremap <leader>el :LocateFile<CR>
-nnoremap <leader>ei :JavaImport<CR>
-nnoremap <leader>eo :JavaImportOrganize<CR>
-nnoremap <leader>ec :JavaCorrect<CR>
+nnoremap <leader>lf :LocateFile<CR>
+nnoremap <leader>ji :JavaImport<CR>
+nnoremap <leader>jo :JavaImportOrganize<CR>
+nnoremap <leader>jc :JavaCorrect<CR>
 
 " Window switch
 nnoremap <leader>wz :only<CR>
@@ -191,6 +235,14 @@ nnoremap <leader>wh :hide<CR>
 nnoremap <leader>wv :vsplit<CR>
 nnoremap <leader>ws :split<CR>
 nnoremap <leader>wo <c-w><c-w>
+nnoremap <leader>wl <c-w>l
+nnoremap <leader>wh <c-w>h
+nnoremap <leader>wH <c-w><c-w>:hide<cr>
+" Use ctrl + <movement key> to navigate splits
+nmap <silent> <C-H> :wincmd h<CR>
+nmap <silent> <C-J> :wincmd j<CR>
+nmap <silent> <C-K> :wincmd k<CR>
+nmap <silent> <C-L> :wincmd l<CR>
 
 " Comments
 nnoremap <leader>cc :TComment<CR>
@@ -198,12 +250,15 @@ nnoremap <leader>cc :TComment<CR>
 " Unite
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+
 nnoremap <leader>fa :<C-u>Unite -buffer-name=files   -start-insert file_rec/async:!<cr>
 nnoremap <leader>ff :<C-u>Unite -buffer-name=files   -start-insert file<cr>
 nnoremap <leader>fr :<C-u>Unite -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>hu :<C-u>Unite -buffer-name=unite_history    history/unite<cr>
+nnoremap <leader>hu :<C-u>Unite -buffer-name=unite_history -start-insert history/unite<cr>
 nnoremap <leader>fc :<C-u>Unite -buffer-name=command -start-insert command<cr>
-nnoremap <c-b> :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+nnoremap <c-b> :<C-u>Unite -buffer-name=buffer -start-insert buffer<cr>
+nnoremap <leader>fF :<C-u>Unite -buffer-name=function -start-insert function<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -213,6 +268,9 @@ function! s:unite_settings()
   " Enable navigation with control-j and control-k in insert mode
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-  iunmap <Tab>
+  nmap <buffer> <Esc>   <Plug>(unite_exit)
+  imap <buffer><silent><expr> <C-v> unite#do_action('vsplit')
+  imap <buffer><silent><expr> <C-s> unite#do_action('split')
 endfunction
+
 
