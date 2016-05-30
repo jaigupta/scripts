@@ -40,7 +40,7 @@ set nofoldenable
 set foldlevel=2
 set hlsearch
 set incsearch
-set sessionoptions=buffers
+set sessionoptions=buffers,blank,curdir,folds
 
 " leader is <Space> and \ for backup
 let mapleader='\'
@@ -193,7 +193,8 @@ let g:NERDTreeDirArrows = 1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 let g:session_autoload = 'no'
-let g:session_autosave = 'no'
+let g:session_autosave = 'yes'
+let g:session_default_name = 'client1'
 let g:solarized_termcolors=256
 
 " Basic comman shortcuts
@@ -201,10 +202,6 @@ nnoremap <leader>w :w<cr>
 
 " Avoid the Esc key
 inoremap jk <Esc>
-
-" Navigation
-nnoremap <c-j> 30j
-nnoremap <c-k> 30k
 
 nnoremap <leader>bn :bnext<CR>
 nnoremap <leader>bp :bprevious<CR>
@@ -235,14 +232,12 @@ nnoremap <leader>wh :hide<CR>
 nnoremap <leader>wv :vsplit<CR>
 nnoremap <leader>ws :split<CR>
 nnoremap <leader>wo <c-w><c-w>
-nnoremap <leader>wl <c-w>l
-nnoremap <leader>wh <c-w>h
 nnoremap <leader>wH <c-w><c-w>:hide<cr>
 " Use ctrl + <movement key> to navigate splits
-nmap <silent> <C-H> :wincmd h<CR>
-nmap <silent> <C-J> :wincmd j<CR>
-nmap <silent> <C-K> :wincmd k<CR>
-nmap <silent> <C-L> :wincmd l<CR>
+nmap <silent> <C-h> :wincmd h<CR>
+nmap <silent> <C-j> :wincmd j<CR>
+nmap <silent> <C-k> :wincmd k<CR>
+nmap <silent> <C-l> :wincmd l<CR>
 
 " Comments
 nnoremap <leader>cc :TComment<CR>
@@ -273,4 +268,13 @@ function! s:unite_settings()
   imap <buffer><silent><expr> <C-s> unite#do_action('split')
 endfunction
 
-
+function! SwitchSessionAndEclim(client_name)
+  let current_session_name = xolox#session#find_current_session()
+  execute "SaveSession"
+  execute "CloseSession"
+  execute ":%bd"
+  execute "OpenSession ".a:client_name
+  execute "ProjectClose ".current_session_name."-magicjar"
+  execute "ProjectOpen ".a:client_name."-magicjar"
+endfunction
+com! -nargs=1 SwitchSessionAndEclim call SwitchSessionAndEclim(<f-args>) 
