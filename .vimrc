@@ -22,6 +22,9 @@ set t_Co=256
 " Display status line always
 set laststatus=2
 
+set autoindent
+set cindent
+set smartindent
 set ruler
 set hidden
 set confirm
@@ -59,12 +62,9 @@ set background=dark
 
 " Show margin at 81 columns by default
 set colorcolumn=81
-" Word wrap at 80 columns by default
-set textwidth=80
 
 " Java files can have 100 characters per line
 autocmd bufreadpre *.java setlocal colorcolumn=101
-autocmd bufreadpre *.java setlocal textwidth=79
 
 " Start scrolling before we reach the edges of the editing window
 set scrolloff=14
@@ -134,6 +134,8 @@ Plugin 'Chiel92/vim-autoformat'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'Zuckonit/vim-airline-tomato'
+Plugin 'tpope/vim-dispatch'
+Plugin 'scrooloose/syntastic'
 
 " Solarized color theme
 Plugin 'alteration/vim-colors-solarized'
@@ -194,11 +196,13 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 let g:session_autoload = 'no'
 let g:session_autosave = 'yes'
-let g:session_default_name = 'client1'
 let g:solarized_termcolors=256
 
 " Basic comman shortcuts
-nnoremap <leader>w :w<cr>
+" Note that this is not the leader key mapping.
+" Leader key is <Space> with \ as backup.
+nnoremap ,w :w<cr>
+nnoremap <leader>ts :SyntasticToggleMode<cr>
 
 " Avoid the Esc key
 inoremap jk <Esc>
@@ -268,13 +272,48 @@ function! s:unite_settings()
   imap <buffer><silent><expr> <C-s> unite#do_action('split')
 endfunction
 
-function! SwitchSessionAndEclim(client_name)
+function! OpenSessionAndEclim(client_name)
+  execute "OpenSession ".a:client_name
+  execute "ProjectOpen ".a:client_name."-magicjar"
+  execute ":e BUILD"
+  execute ":PiperLoadActiveAsBuffers"
+  execute ":bd ^BUILD"
+endfunction
+com! -nargs=1 OpenSessionAndEclim call OpenSessionAndEclim(<f-args>)
+
+function! CloseSessionAndEclim()
   let current_session_name = xolox#session#find_current_session()
   execute "SaveSession"
   execute "CloseSession"
   execute ":%bd"
-  execute "OpenSession ".a:client_name
   execute "ProjectClose ".current_session_name."-magicjar"
-  execute "ProjectOpen ".a:client_name."-magicjar"
 endfunction
-com! -nargs=1 SwitchSessionAndEclim call SwitchSessionAndEclim(<f-args>) 
+com! CloseSessionAndEclim call CloseSessionAndEclim()
+
+function! SwitchSessionAndEclim(client_name)
+  execute ":call CloseSessionAndEclim()"
+  execute ":call OpenSessionAndEclim('".a:client_name."')"
+endfunction
+com! -nargs=1 SwitchSessionAndEclim call SwitchSessionAndEclim(<f-args>)
+
+com! DiffOff :diffoff | bd
+
+autocmd FileType c  nnoremap <silent> <buffer> <cr> :CSearchContext<cr>
+autocmd FileType java  nnoremap <silent> <buffer> <cr> :JavaSearchContext<cr>
+
+" Eclim disables all the syntastic plugins. We need to enable it for every
+" language we want manually.
+" Commented as this is now handled by explicity setting syntastic modes.
+" let g:EclimFileTypeValidate = 0
+" let g:EclimPythonSyntasticEnabled = 1
+
+" Pomodoro
+let g:tomato#remind = "☻"
+let g:tomato#restinfo = "☺"
+let g:tomato#show_clock = 1
+let g:tomato#show_count_down = 1
+let g:tomato#interval = 50 * 60
+let g:tomato#rest_time = 10 * 60
+
+" Remember my last position in file.
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
