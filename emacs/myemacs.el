@@ -1,28 +1,10 @@
-;; README
-;;
-;; New setup instructions
-;; ======================
-;;
-;; myemacs.el is the initiation point for all configurations.
-;; ln -sf <path to repo>/myemacs.el ~/.emacs
-;;
-;; for all variable defitions which need to go at top, include in ~/settings/emacs-custom-vars.el
-;; ln -sf <path to custom repo>/custom-vars.el ~/settings/emacs-custom-vars.el
-;;
-;; do the same thing for custom defs. These are loaded a bit later down this config file.
-;; ln -sf <path to custom repo/custom-defs.el ~/settings/emacs-custom-defs.el
-		;;
-;; Thats all! Happy Productivity!
-
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/")) ; Org-mode's repository
 (package-initialize)
 
-(load-file "~/settings/emacs-custom-vars.el")
 (add-to-list 'load-path "~/myprojects/scripts/emacs/")
-(add-to-list 'load-path "~/myprojects/emacs/emacs-eclim/")
 
 (setq-default tab-width 2)
 
@@ -31,12 +13,39 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
+ '(ansi-color-names-vector
+   ["black"
+    "#d55e00"
+    "#009e73"
+    "#f8ec59"
+    "#0072b2"
+    "#cc79a7"
+    "#56b4e9"
+    "white"])
  '(blink-cursor-mode nil)
  '(column-number-mode t)
- '(company-backends (quote (company-emacs-eclim company-elisp company-bbdb company-css company-semantic company-clang company-xcode company-cmake company-go company-capf (company-dabbrev-code company-gtags company-etags company-keywords) company-oddmuse company-files company-dabbrev company-abbrev)))
- '(custom-enabled-themes nil)
- '(custom-safe-themes (quote ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
+ '(company-backends 
+   (quote
+    (company-emacs-eclim
+     company-elisp
+     company-bbdb
+     company-css
+     company-semantic
+     company-clang
+     company-xcode
+     company-cmake
+     company-go
+     company-capf
+     (company-dabbrev-code
+      company-gtags
+      company-etags
+      company-keywords)
+     company-oddmuse
+     company-files
+     company-dabbrev
+     company-abbrev)))
+ '(custom-enabled-themes (quote (solarized-dark)))
+ '(custom-safe-themes (quote ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(ecb-options-version "2.40")
  '(eclim-eclipse-dirs jai-eclim-executable)
  '(eclim-executable jai-eclim-executable)
@@ -57,24 +66,6 @@
 ;; '(tramp-syntax (quote url))
  '(truncate-lines nil))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#111111" :foreground "LightGrey" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "unknown" :family "Mono Sans Dejavu"))))
- '(company-scrollbar-bg ((t (:background "#191919"))))
- '(company-scrollbar-fg ((t (:background "#0c0c0c"))))
- '(company-tooltip ((t (:inherit default :background "#191919"))))
- '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
- '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
- '(tabbar-button ((t (:inherit tabbar-default :foreground "dark red"))))
- '(tabbar-button-highlight ((t (:inherit tabbar-default))))
- '(tabbar-default ((t (:inherit variable-pitch :background "#888888" :foreground "black"))))
- '(tabbar-highlight ((t (:underline t))))
- '(tabbar-selected ((t (:inherit tabbar-default :background "#CCCCCC"))))
- '(tabbar-separator ((t (:inherit tabbar-default :background "#555555"))))
- '(tabbar-unselected ((t (:inherit tabbar-default)))))
 
 (global-auto-revert-mode t)
 (set-frame-font "Liberation Mono-14:antialias=1")
@@ -115,10 +106,6 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-
-;; enable smooth scrolling
-(require 'smooth-scrolling)
-(smooth-scrolling-mode t)
 
 ;; ido-mode
 (require 'ido)
@@ -238,7 +225,6 @@
 ;; enable multi buffer interactive search
 ;; (load "far-search")
 
-
 (setq visible-bell nil)
 (setq mouse-autoselect-window t)
 
@@ -276,22 +262,6 @@
 (setq show-ws-toggle-show-trailing-whitespace t)
 (setq show-ws-toggle-show-tabs t)
 
-;; orgmode
-(setq org-todo-keywords '((sequence "TODO" "WIP" "WAIT" "DONE")))
-(setq org-todo-keyword-faces
-      '(("TODO"      :foreground "red3"         :weight bold)
-        ("WIP"       :foreground "dark orange"        :weight bold)
-        ("WAIT"      :foreground "orange2"      :weight bold)
-        ("DONE"      :foreground "forest green" :weight bold)))
-(add-hook 'org-mode-hook
-          (lambda()
-            (local-set-key (kbd "C-t") 'org-todo)))
-
-;; (find-file "~/org/todo.org") ;; Doing in later 
-;; org-mode must already to running TODO: add as hook?
-;; (define-key org-mode-map (kbd "C-TAB") 'org-cycle) ;; C-TAB cycles current line
-
-
 ;; Delete extra blank lines at the end of a file
 (defun delete-trailing-blank-lines ()
   "Deletes all blank lines at the end of the file."
@@ -322,28 +292,6 @@
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
-
-
-;; (require 'auto-complete)
-;; (global-auto-complete-mode t)
-;; ;; regular auto-complete initialization
-;; (require 'auto-complete-config)
-;; (ac-config-default)
-;; 
-;; (set-default 'ac-sources
-;;              '(ac-source-abbrev
-;;                ac-source-dictionary
-;;                ac-source-yasnippet
-;;                ac-source-words-in-buffer
-;;                ac-source-words-in-same-mode-buffers
-;;                ac-source-semantic))
-;; 
-;; (dolist (m '(c-mode c++-mode java-mode))
-;;   (add-to-list 'ac-modes m))
-;; 
-;; ;; add the emacs-eclim source
-;; (require 'ac-emacs-eclim-source)
-;; (ac-emacs-eclim-config)
 
 (require 'yasnippet)
 (setq yas-snippet-dirs
@@ -640,8 +588,6 @@
   (helm-spotify)
   (setq debug-on-error nil))
 
-(load-file "~/settings/emacs-custom-defs.el")
-
 ;; ERC using SSL: see http://www.emacswiki.org/emacs/ErcSSL
 (require 'tls)
 
@@ -666,5 +612,3 @@
 
 ;; Open some useful buffers by default
 (find-file "~/.emacs")
-(find-file "~/.zshrc")
-(find-file "~/todo.org")

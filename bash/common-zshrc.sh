@@ -63,3 +63,10 @@ function progressbar() {
     echo
   fi
 }
+
+
+alias tl='tmux -2 attach -t laptop -d || tmux -2 new -s laptop'
+alias tl1='tmux -2 attach -t laptop1 -d || tmux -2 new -s laptop1'
+alias tl2='tmux -2 attach -t laptop2 -d || tmux -2 new -s laptop2'
+alias tl3='tmux -2 attach -t laptop3 -d || tmux -2 new -s laptop3'
+alias td='tmux -2 attach -t desktop -d || tmux -2 new -s desktop'
