@@ -29,6 +29,7 @@ set t_Co=256
 " Display status line always
 set laststatus=2
 
+set nocompatible
 set autoindent
 set cindent
 set smartindent
@@ -203,6 +204,7 @@ Plugin 'tpope/vim-pathogen'
 Plugin 'mhinz/vim-signify'
 
 Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'Chiel92/vim-autoformat'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -224,12 +226,15 @@ else
   let g:airline_left_sep = '▶'
   let g:airline_right_sep = '«'
   let g:airline_right_sep = '◀'
-  colorscheme gruvbox
+  " colorscheme gruvbox
   let g:airline_theme="term"
 endif
 
 hi Search guibg=red guifg=wheat
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
+
+" Autoformat on close
+au BufWrite * :Autoformat
 
 " Basic comman shortcuts
 " Note that this is not the leader key mapping.
@@ -276,8 +281,8 @@ nmap <silent> <C-k> :wincmd k<CR>
 nmap <silent> <C-l> :wincmd l<CR>
 
 " Unite
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" call unite#filters#sorter_default#use(['sorter_rank'])
 
 nnoremap <leader>fa :<C-u>Unite -buffer-name=files   -start-insert file_rec/async:!<cr>
 nnoremap <leader>ff :<C-u>Unite -buffer-name=files   -start-insert file<cr>
@@ -407,19 +412,19 @@ function! AutoHighlightToggle()
   if exists('#auto_highlight')
     au! auto_highlight
     augroup! auto_highlight
-      setl updatetime=4000
-      echo 'Highlight current word: off'
-      return 0
-    augroup END
-  else
-    augroup auto_highlight
-      au!
-      au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-    augroup end
-    setl updatetime=2000
-    echo 'Highlight current word: ON'
-    return 1
-  endif
+    setl updatetime=4000
+    echo 'Highlight current word: off'
+    return 0
+  augroup END
+else
+  augroup auto_highlight
+    au!
+    au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+  augroup end
+  setl updatetime=2000
+  echo 'Highlight current word: ON'
+  return 1
+endif
 endfunction
 
 nnoremap <leader>So :OpenSession asq1<cr>
@@ -432,25 +437,25 @@ function! ProfileStart()
 endfunction
 
 function! s:Scratch (command, ...)
-   redir => lines
-   let saveMore = &more
-   set nomore
-   execute a:command
-   redir END
-   let &more = saveMore
-   call feedkeys("\<cr>")
-   new | setlocal buftype=nofile bufhidden=hide noswapfile
-   put=lines
-   if a:0 > 0
-      execute 'vglobal/'.a:1.'/delete'
-   endif
-   if a:command == 'scriptnames'
-      %substitute#^[[:space:]]*[[:digit:]]\+:[[:space:]]*##e
-   endif
-   silent %substitute/\%^\_s*\n\|\_s*\%$
-   let height = line('$') + 3
-   execute 'normal! z'.height."\<cr>"
-   0
+  redir => lines
+  let saveMore = &more
+  set nomore
+  execute a:command
+  redir END
+  let &more = saveMore
+  call feedkeys("\<cr>")
+  new | setlocal buftype=nofile bufhidden=hide noswapfile
+  put=lines
+  if a:0 > 0
+    execute 'vglobal/'.a:1.'/delete'
+  endif
+  if a:command == 'scriptnames'
+    %substitute#^[[:space:]]*[[:digit:]]\+:[[:space:]]*##e
+  endif
+  silent %substitute/\%^\_s*\n\|\_s*\%$
+  let height = line('$') + 3
+  execute 'normal! z'.height."\<cr>"
+  0
 endfunction
 
 command! -nargs=+ Scratch call <sid>Scratch(<f-args>)
