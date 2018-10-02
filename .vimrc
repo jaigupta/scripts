@@ -184,7 +184,7 @@ Plugin 'moll/vim-node'
 Plugin 'burnettk/vim-angular'
 
 " Solarized color theme
-Plugin 'alteration/vim-colors-solarized'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'morhetz/gruvbox'
 
 Plugin 'Shougo/unite.vim'
@@ -216,19 +216,14 @@ filetype plugin indent on
 syntax enable
 
 let g:airline#extensions#tabline#enabled = 1
-if has('gui_running')
-  colorscheme solarized
-  let g:airline_powerline_fonts = 1
-else
-  " Instead of installing the powerline fonts, I am using my own symbols from
-  " unicode.
-  let g:airline_left_sep = '»'
-  let g:airline_left_sep = '▶'
-  let g:airline_right_sep = '«'
-  let g:airline_right_sep = '◀'
-  " colorscheme gruvbox
-  let g:airline_theme="term"
-endif
+colorscheme solarized
+" Instead of installing the powerline fonts, I am using my own symbols from
+" unicode.
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_theme="term"
 
 hi Search guibg=red guifg=wheat
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
