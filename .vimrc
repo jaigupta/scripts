@@ -8,6 +8,7 @@ endif
 " autocompletion
 set wildmode=longest,list,full
 set wildmenu
+set backspace=indent,eol,start
 
 set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 
@@ -42,7 +43,7 @@ set noshowmode
 set number
 " Use <leader>cor from unimpaired
 " set relativenumber
-set tabstop=4 shiftwidth=4 expandtab
+set tabstop=2 shiftwidth=2 expandtab
 set conceallevel=0
 " Always display status line`
 set laststatus=4
@@ -209,6 +210,14 @@ Plugin 'mhinz/vim-signify'
 Plugin 'maralla/completor.vim'
 
 Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'beautify-web/js-beautify'
+Plugin 'leafgarland/typescript-vim'
+
+Plugin 'google/vim-maktaba'
+Plugin 'google/vim-codefmt'
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+Plugin 'google/vim-glaive'
+
 "Plugin 'Chiel92/vim-autoformat'
 
 " All of your Plugins must be added before the following line
@@ -234,8 +243,23 @@ autocmd FileType python map <buffer> <F3> :call Flake8()<CR>
 "let g:airline_right_sep = '◀'
 "let g:airline_theme="term"
 
-" Autoformat on close
+" Autoformat on write (vim-autoformat)
 " au BufWrite * :Autoformat
+
+" Google formatters
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+  autocmd FileType rust AutoFormatBuffer rustfmt
+  autocmd FileType vue AutoFormatBuffer prettier
+augroup END
 
 " Basic comman shortcuts
 " Note that this is not the leader key mapping.
